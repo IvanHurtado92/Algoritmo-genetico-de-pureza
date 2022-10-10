@@ -27,6 +27,7 @@ int main(){
         if(i==0){generaraleatorios(MPadres);}
         cout<<"Arreglo con los Padres Originales\n\n";
         //Sleep(100);
+        ordenar(MPadres);
         imprimir(MPadres);
         cout<<endl;
         cruzar(MPadres);
@@ -72,6 +73,7 @@ void cruzar(string matriz[]){
     int conteo=0;
     int pcruce;
     int final=0, inicial=0; //asignaremos indices aleatorios a los padres, no será el primero con el último
+    int mutados=0;
 
     bool apartados[10];
     for(int i=0;i<10;i++){
@@ -81,7 +83,7 @@ void cruzar(string matriz[]){
     //se declaran los valores iniciales de inicio y final, que están en posiciones opuestas
     string padre1,padre2,hijo1,hijo2; //se crean los padres e hijos
 
-    while(conteo!=5){ //solo se puede hacer el cambio cinco veces, de 0-4
+    while(conteo!=3){ //solo se puede hacer el cambio tres veces, de 0-2, solo se seleccionarán 6 padres de los 10 elementos en lugar de 10 padres con todos los elementos
         do{
             inicial = rand() % 10; //busca un valor alatorio entre 0 y 9
         }while(apartados[inicial]==true); //solo lo toma si su índice no ha sido usado antes
@@ -94,20 +96,21 @@ void cruzar(string matriz[]){
 
         padre1 = matriz[inicial]; //empezaremos a sustituir valores del padre1 y padre2, que serán el primer y último elemento de la cadena respectivamente de lo que valgan inicial y final
         padre2 = matriz[final];
+
         pcruce = rand()%10;
         hijo1 = Chijo(padre1,padre2,pcruce); //generamos el hijo a partir de p1 y p2
         hijo2 = Chijo(padre2,padre1,pcruce); //generamos el hijo a partir de p2 y p1
 
-        cout<<"Hijos de Elemento "<<inicial+1<<" y "<<final+1<<endl;
-        cout<<hijo1<<endl;
-        cout<<hijo2<<endl<<endl;
+        // cout<<"Hijos de Elemento "<<inicial+1<<" y "<<final+1<<endl;
+        // cout<<hijo1<<endl;
+        // cout<<hijo2<<endl<<endl;
         
-        cout<<"Hijos mutados "<<inicial+1<<" y "<<final+1<<endl;
-        hijo1 = mutacion(hijo1); //mutamos el hijo, y retorna la mutación, si es que muta en primer lugar
-        hijo2 = mutacion(hijo2);
+        // cout<<"Hijos mutados "<<inicial+1<<" y "<<final+1<<endl;
+        // hijo1 = mutacion(hijo1); //mutamos el hijo, y retorna la mutación, si es que muta en primer lugar
+        // hijo2 = mutacion(hijo2);
 
-        cout<<hijo1<<endl;
-        cout<<hijo2<<endl<<endl;
+        // cout<<hijo1<<endl;
+        // cout<<hijo2<<endl<<endl;
 
         if(contarceros(hijo1)>contarceros(padre1)){ //usamos contarceros para saber si el h1 tiene más 0's que el p1
             matriz[inicial] = hijo1;
@@ -121,6 +124,16 @@ void cruzar(string matriz[]){
                 matriz[final] = hijo2;
             }
         }
+
+        if(inicial>4 && mutados!=2 && contarceros(matriz[inicial])!=10){ //escoge solo los últimos 5 elementos para mutar y solo puede escoger 2 que no sean puros
+            matriz[inicial]=mutacion(matriz[inicial]);
+            mutados++;
+        }
+        if(final>4 && mutados!=2 && contarceros(matriz[final])!=10){
+            matriz[final]=mutacion(matriz[final]);
+            mutados++;
+        }
+
         conteo++;
     }
     for(int i=0;i<10;i++){
@@ -141,7 +154,6 @@ string Chijo(string pa1, string pa2,int puntocruce){ //Crearhijo funciona tomand
             hijo[i] = pa2[i];
         }
     }
-    cout<<"Punto c: "<<puntocruce<<endl;
     return hijo; //te regresa la nueva cadena ya modificada
 }
 
@@ -177,18 +189,29 @@ void imprimir(string arreglo[]){ //se imprime el arreglo seleccionado
 
 string mutacion(string arreglo){
     arreglo.resize(10);
+    int tope = (rand()%4)+1; //aleatorio de 1 a 4, el límite de elementos a mutar
+    int mutados =0;
     int aleatorio;
-    bool mutado = false; //solo se permite mutar un caracter de los 10
+
+    bool apartados[10];
     for(int i=0;i<10;i++){
-        aleatorio = rand()%100 + 1; //aleatorio del 1 al 100
-        if(aleatorio<=30 && mutado==false){ //si el aleatorio es 30 o menor, 30% de probabilidad de mutación
+        apartados[i] = false; //se genera un arreglo que cuenta las cadenas que ya fueron usadas
+    } 
+
+    for(int i=0;i<10;i++){
+        do{
+            aleatorio = rand() % 10; //busca un valor alatorio entre 0 y 9
+        }while(apartados[aleatorio]==true); //solo lo toma si su índice no ha sido usado antes
+        apartados[aleatorio]=true; //en cuanto lo toma, ya no está disponible posteriormente
+
+        if(mutados!=tope){ //si el aleatorio es menor o igual a tope*10, tope*10% de probabilidad de mutación
             if(arreglo[i] == '0'){
                 arreglo[i]='1';
             }
             else{
                 arreglo[i]='0';
             }
-            mutado = true; // en cuanto se muta, se impide que se muten nuevamente.
+            mutados+=1; // en cuanto se muta, se impide que se muten nuevamente.
         }
     }
     return arreglo;
