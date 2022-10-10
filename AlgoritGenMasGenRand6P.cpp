@@ -37,7 +37,13 @@ int main(){
         imprimir(MPadres);
         cout<<endl;
         // system("pause");
-        if(contarceros(MPadres[0])==10){
+        bool pureza = true;
+        for(int i=0;i<10;i++){
+            if(contarceros(MPadres[i])!=10){
+                pureza = false;
+            }
+        }
+        if(pureza == true){
             cout<<"Terminado en generacion "<<i+1<<endl;
             system("pause");
             return 0;
