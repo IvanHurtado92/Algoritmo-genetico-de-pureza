@@ -48,7 +48,7 @@ int main(){
             return 0;
         }
     }
-    cout<<"\nNo se obtuvo un elemento puro en ninguna generacion\n\n"<<endl;
+    cout<<"\nNo se obtuvo una generacion pura\n\n"<<endl;
     system("pause");
     return 0;
 }
