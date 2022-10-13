@@ -48,7 +48,7 @@ int main(){
             return 0;
         }
     }
-    cout<<"\nNo se obtuvo un elemento puro en ninguna generacion\n\n"<<endl;
+    cout<<"\nNo se obtuvo una generacion pura\n\n"<<endl;
     system("pause");
     return 0;
 }
@@ -165,7 +165,7 @@ void ordenar(string arreglo[]){ //usamos el método de burbuja para ordenar de m
             }
         }
     }
-
+    
 }
 
 void imprimir(string arreglo[]){ //se imprime el arreglo seleccionado
