@@ -16,40 +16,35 @@ string mutacion(string);
 
 int main(){
     srand(time(NULL));
-    int gen;
-    do{
-        system("cls");
-        cout<<"Ingresa el numero de generaciones que quieres que se generen ---> ";
-        std::cin>>gen;
-    }while(gen<=0||gen>1000);
-    
-    for(int i=0;i<gen;i++){
-        cout<<"\nGeneracion "<<i+1<<endl<<endl;
-        if(i==0){generaraleatorios(MPadres);}
-        cout<<"Arreglo con los Padres Originales\n\n";
-        //Sleep(100);
-        imprimir(MPadres);
-        cout<<endl;
-        cruzar(MPadres);
-        ordenar(MPadres);
-        cout<<"Arreglo con los Hijos ordenado del mas al menos puro\n\n";
-        //Sleep(100);
-        imprimir(MPadres);
-        cout<<endl;
-        // system("pause");
-        bool pureza = true;
-        for(int i=0;i<10;i++){
-            if(contarceros(MPadres[i])!=10){
-                pureza = false;
+    float prom=0;
+    bool encontrado = false;
+    for(int j=0;j<1000;j++){
+        encontrado = false;
+        cout<<"Ejecucion "<<j+1<<endl;
+        for(int i=0;i<250 && encontrado==false;i++){
+            if(i==0){generaraleatorios(MPadres);}
+            ordenar(MPadres);
+            cruzar(MPadres);
+            ordenar(MPadres);
+            bool pureza = true;
+            for(int i=0;i<10;i++){
+                if(contarceros(MPadres[i])!=10){
+                    pureza = false;
+                }
             }
-        }
-        if(pureza == true){
-            cout<<"Terminado en generacion "<<i+1<<endl;
-            system("pause");
-            return 0;
+            if(pureza == true){
+                prom += i;
+                cout<<"Terminado en generacion "<<i+1<<endl;
+                encontrado = true;
+            }
+            else if(pureza == false && i == 249)
+            {
+                cout<<"\nNo se obtuvo una generacion pura"<<endl;
+            } 
         }
     }
-    cout<<"\nNo se obtuvo un elemento puro en ninguna generacion\n\n"<<endl;
+    prom = prom/1000;
+    cout<<"Promedio de generacion optima: "<<prom<<endl;
     system("pause");
     return 0;
 }
@@ -98,16 +93,8 @@ void cruzar(string matriz[]){
         hijo1 = Chijo(padre1,padre2,pcruce); //generamos el hijo a partir de p1 y p2
         hijo2 = Chijo(padre2,padre1,pcruce); //generamos el hijo a partir de p2 y p1
 
-        cout<<"Hijos de Elemento "<<inicial+1<<" y "<<final+1<<endl;
-        cout<<hijo1<<endl;
-        cout<<hijo2<<endl<<endl;
-        
-        cout<<"Hijos mutados "<<inicial+1<<" y "<<final+1<<endl;
         hijo1 = mutacion(hijo1); //mutamos el hijo, y retorna la mutación, si es que muta en primer lugar
         hijo2 = mutacion(hijo2);
-
-        cout<<hijo1<<endl;
-        cout<<hijo2<<endl<<endl;
 
         if(contarceros(hijo1)>contarceros(padre1)){ //usamos contarceros para saber si el h1 tiene más 0's que el p1
             matriz[inicial] = hijo1;
@@ -141,7 +128,6 @@ string Chijo(string pa1, string pa2,int puntocruce){ //Crearhijo funciona tomand
             hijo[i] = pa2[i];
         }
     }
-    cout<<"Punto c: "<<puntocruce<<endl;
     return hijo; //te regresa la nueva cadena ya modificada
 }
 

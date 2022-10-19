@@ -15,6 +15,7 @@ void imprimir(string[]);
 string mutacion(string);
 
 int main(){
+    srand(time(NULL));
     int gen;
     do{
         system("cls");
@@ -55,7 +56,6 @@ int main(){
 }
 
 void generaraleatorios(string matriz[]){
-    srand(time(NULL));
     for(int i=0;i<10;i++){
         matriz[i].resize(10); // les asignamos inicialmente un tamaño para que se pueda trabajar con ellos
         for(int j=0;j<10;j++){
